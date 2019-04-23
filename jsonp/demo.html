@@ -1,0 +1,43 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>demo test</title>
+
+  </head>
+  <body>
+      <script>
+      function jsonp({params, url, callback}) {
+        console.log(params, url, callback)
+        return new Promise((resolve, reject) => {
+          console.log("promise start");
+          var ele = document.createElement("script");  // 标签的操作
+          let arrs = [];
+          window[callback] = function(data) {
+            console.log("promise resolved");
+            resolve(data);
+            document.body.removeChild(ele);
+          }
+          params = {...params, callback}; // ...扩展运算符也能用对象啊
+          for(let key in params) {  // 一开始用来of
+            arrs.push(`${key}=${params[key]}`);
+          }
+          url = `${url}?${arrs.join('&')}`;  //url
+          ele.src = url;  // 遗忘了
+          document.body.appendChild(ele);
+        })
+      }
+      jsonp({
+        params: {
+          "a": 1
+        },
+        url: "http://localhost:3000/say",
+        callback: "sayHi"
+      }).then(data => {
+        console.log(data);
+      })
+      </script>
+  </body>
+</html>
+<style>
