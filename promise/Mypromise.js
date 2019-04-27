@@ -113,11 +113,3 @@ function resolvePromise(promise2, x, resolve, reject) {
         resolve(x);
     }
 }
-Mypromise.defer = Mypromise.deferred = function () {
-    let dfd = {};
-    dfd.promise = new Mypromise((resolve, reject) => {
-        dfd.resolve = resolve;
-        dfd.reject = reject;
-    });
-    return dfd;
-}
