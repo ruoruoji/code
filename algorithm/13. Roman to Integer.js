@@ -57,7 +57,6 @@ var romanToInt = function(s) {
     let sum = 0;
     for(let i in s) {
         let current = ROMAN_NUMERALS[s[i]], next = ROMAN_NUMERALS[s[+i + 1]];
-        console.log(current, next)
         if(next && current < next ) {
             sum -= current;
         }
