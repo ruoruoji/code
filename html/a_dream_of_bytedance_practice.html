@@ -1,0 +1,46 @@
+<!DOCUTYPE html>
+<html>
+<HEAD>
+    <title>
+        dream of bytedance practice
+    </title>
+</HEAD>
+<BODy>
+    <SCript>
+        var div1 = document.createElement("div");
+        document.body.appendChild(div1);
+        div1.style = "position: fixed; right: 0px;"
+        var buttons = [];
+        for(let i = 0; i < 3; i++) {
+            buttons[i] = document.createElement("button");
+            buttons[i].innerText = i + 1;
+            buttons[i].style = "color: red"
+            div1.appendChild(buttons[i]);
+        }
+        div1.addEventListener("click", (e) => {
+            var key = e.target.innerText - 1;
+            div1.removeChild(buttons[key]);
+            divs[key].removeChild(imgs[key]);
+        })
+        var div2 = document.createElement("div");
+        div2.style = "text-align: center"
+        document.body.appendChild(div2);
+        var imgs = [];
+        var srcs = [
+        "https://c8.alamy.com/comp/HXYNT8/swaledale-ram-or-tup-with-large-curly-horns-on-farm-in-cumbria-with-HXYNT8.jpg",
+        "http://www.laverocks.co.uk/gilslandmag/desktops/xtup_800.jpg.pagespeed.ic.L2GqGecJk5.jpg",
+        "http://www.farm-images.co.uk/gallery/swaledale/2016/kirkby_fri/full/372.jpg"
+        ];
+        var divs = [];
+        for(let i = 0; i < 3; i++) {
+            imgs[i] = document.createElement("img");
+            divs[i] = document.createElement("div");
+            divs[i].style = "background: yellow;"
+            imgs[i].src = srcs[i];
+            imgs[i].style = "width: 200px; height: 150px; margin: 10px; border: solid;"
+            divs[i].appendChild(imgs[i]);
+            div2.appendChild(divs[i]);
+        }
+    </SCript>
+</BODy>
+</html>

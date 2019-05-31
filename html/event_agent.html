@@ -1,0 +1,21 @@
+<!DOCUTYPE html>
+<html>
+<head>
+    <title>
+        TX 2th Event agent
+    </title>
+</head>
+<body>
+    <div id="test" style="height: 300px;background-color: pink">
+        <div style="width: 500px;height: 300px;background-color: blue"></div>
+    </div>  
+    <script>
+    document.getElementById("test").addEventListener("click", (e) => {
+        if (e.target.parentNode === e.currentTarget) {
+            e.target.style["background-color"] = "black" 
+        }
+        
+    }, false)
+    </script>
+</body>
+</html>
