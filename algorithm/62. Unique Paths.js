@@ -1,5 +1,5 @@
 // var f = function(m, n, mem) {       //方法一： 自顶向下，递归 + 存储查询实现DP
-//     if (m < 1 || n < 1) {           //var mem = new Array(m + 1).fill([])填入一个对象，导致变一个都变
+//     if (m < 1 || n < 1) {           //var mem = new Array(m + 1).fill([])填入同一个对象，导致变一个都变
 //         return 1
 //     } else if (m <  2){
 //         return 1
