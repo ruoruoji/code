@@ -27,35 +27,52 @@
 
 //----------------------------------------------------------------------------------------------------------------------
 
-var uniquePathsWithObstacles = function(obstacleGrid) {       //方法二： 自底向上，递推查询实现DP
-    if (obstacleGrid[0][0] === 1) return 0                    //用两个一维数组模拟dp数组。模仿uniquePaths的高效实现，但空间复杂度还是高
-    var n = obstacleGrid.length
-    var m = obstacleGrid[0].length
-    var dp = []
-    var row = []
-    var col = []
-    for (let i = 0; i < n; i++) {
-        for (let j = 0; j < m; j++) {
-            if (i === 0) {
-                if(row[j - 1] === 0 || obstacleGrid[i][j] === 1) row[j] = 0
-                else row[j] = 1
-            } else {
-                if (j === 0) {
-                    if(col[i - 1] === 0 || obstacleGrid[i][j] === 1) col[i] = 0
-                    else col[i] = 1
-                    break
-                }
+// var uniquePathsWithObstacles = function(obstacleGrid) {       //方法二： 自底向上，递推查询实现DP
+//     if (obstacleGrid[0][0] === 1) return 0                    //用两个一维数组模拟dp数组。模仿uniquePaths的高效实现，但空间复杂度还是高
+//     var n = obstacleGrid.length
+//     var m = obstacleGrid[0].length
+//     var dp = []
+//     var row = []
+//     var col = []
+//     for (let i = 0; i < n; i++) {
+//         for (let j = 0; j < m; j++) {
+//             if (i === 0) {
+//                 if(row[j - 1] === 0 || obstacleGrid[i][j] === 1) row[j] = 0
+//                 else row[j] = 1
+//             } else {
+//                 if (j === 0) {
+//                     if(col[i - 1] === 0 || obstacleGrid[i][j] === 1) col[i] = 0
+//                     else col[i] = 1
+//                     break
+//                 }
+//             }
+//         }
+//     }
+//     if (n === 1) return row[m - 1]
+//     if (m === 1) return col[n - 1]
+//     for (let i = 1; i < m; i++) {
+//         for (let j = 1; j < n; j++) {
+//             if (obstacleGrid[j][i] === 1) dp[j] = 0
+//             else dp[j] = (typeof(dp[j]) === "undefined" ? col[j] : dp[j]) + (typeof(dp[j - 1]) === "undefined" ? row[i] : dp[j - 1])
+//         }
+//     }
+//     return dp[n -1]
+// };
+
+//-------------------------------------------------------------------------------------------------------------------------
+
+var uniquePathsWithObstacles = function(obstacleGrid) {  //精妙的用DP1处理
+    var width = obstacleGrid[0].length
+    var dp = [1]
+    for (let row of obstacleGrid) {
+        for (let i = 0; i < width; i++) {
+            if (row[i] === 1) dp[i] = 0        
+            else if (i > 0) {        //上一行 + i > 0实现第一列的穿透
+                if (typeof(dp[i]) === 'undefined') dp[i] = dp[i - 1]  //实现第一行的穿透
+                else dp[i] = dp[i] + dp[i - 1]
             }
         }
     }
-    if (n === 1) return row[m - 1]
-    if (m === 1) return col[n - 1]
-    for (let i = 1; i < m; i++) {
-        for (let j = 1; j < n; j++) {
-            if (obstacleGrid[j][i] === 1) dp[j] = 0
-            else dp[j] = (typeof(dp[j]) === "undefined" ? col[j] : dp[j]) + (typeof(dp[j - 1]) === "undefined" ? row[i] : dp[j - 1])
-        }
-    }
-    return dp[n -1]
+    return dp[width - 1]
 };
-console.log(uniquePathsWithObstacles([[0], [1]]))
+console.log(uniquePathsWithObstacles([[0,1,0,0,0],[1,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]))
