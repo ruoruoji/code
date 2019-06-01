@@ -14,4 +14,21 @@
 
 //------------------------------------------------------------------------------------------------------
                                                     
-                                                          //方法二   O(n*logn)Time
+var lengthOfLIS = function(nums) {             //方法二   O(n*logn)Time  不太理解，仍需推敲
+    if (!nums.length) return 0                 //二分查找优化。找到dp中第一个>=item的元素替换或push
+    let dp = [nums[0]]
+    for (let i = 1; i < nums.length; i++) {
+        if (nums[i] > dp[dp.length - 1]) dp.push(nums[i])
+        else {
+            let left = 0, right = dp.length - 1
+            while (left < right) {
+                let mid = Math.floor((left + right) / 2)
+                if (nums[i] > dp[mid]) left = mid + 1
+                else right = mid
+            }
+            dp[left] = nums[i] 
+        }
+    }
+    return dp.length
+};
+console.log(lengthOfLIS([10,9,2,5,3,7,101,18]))
