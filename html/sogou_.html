@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang=zh-CHS>
+ 
+<head>
+    <meta charset=utf-8>
+    <meta name=viewport content="width=device-width,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name=format-detection content="telephone=no">
+    <meta name=format-detection content="address=no">
+    <title>2019搜狗校招编程题 - 汇率计算器</title>
+</head>
+ 
+<body>
+    <div class="calculator">
+        <header class="cal-header">汇率计算器</header>
+        <main class="cal-main">
+            <div class="cal-view">
+                <div class="row origin">
+                    <select class="origin-type">
+                        <option value="USD" selected>美元</option>
+                        <option value="EUR">欧元</option>
+                        <option value="JPY">日元</option>
+                        <option value="CNY">人民币</option>
+                    </select>
+                    <input class="origin-value"></input>
+                </div>
+                <div class="row target">
+                    <select class="target-type">
+                        <option value="USD">美元</option>
+                        <option value="EUR">欧元</option>
+                        <option value="JPY">日元</option>
+                        <option value="CNY" selected>人民币</option>
+                    </select>
+                    <div class="target-value"></div>
+                </div>
+            </div>
+            <div class="cal-keyboard">
+                <ul class="cal-numList">
+                    <li data-action="num">7</li>
+                    <li data-action="num">8</li>
+                    <li data-action="num">9</li>
+                    <li data-action="num">4</li>
+                    <li data-action="num">5</li>
+                    <li data-action="num">6</li>
+                    <li data-action="num">1</li>
+                    <li data-action="num">2</li>
+                    <li data-action="num">3</li>
+                    <li data-action="num"></li>
+                    <li data-action="num">0</li>
+                    <li data-action="num">.</li>
+                </ul>
+                <div class="buttons">
+                    <div class="btn btn-esc" data-action="esc">清空</div>
+                    <div class="btn btn-backspace" data-action="backspace">退格</div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+ 
+</html>
+<style>
+    body,
+    ul,
+    li,
+    select {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+ 
+    ul,
+    li {
+        list-style: none;
+    }
+ 
+    .calculator {
+        max-width: 300px;
+        margin: 20px auto;
+        border: 1px solid #eee;
+        border-radius: 3px;
+    }
+ 
+    .cal-header {
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+        height: 48px;
+        line-height: 48px;
+        border-bottom: 1px solid #eee;
+        text-align: center;
+    }
+ 
+    .cal-main {
+        font-size: 14px;
+    }
+ 
+    .cal-view {
+        padding: 15px 0;
+        background-color: #fefefe;
+    }
+ 
+    .cal-main .row {
+        line-height: 30px;
+        padding: 10px 15px;
+    }
+
+    .cal-main .target-value {
+        display: inline-block;
+        width: 175px;
+        height: 30px;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+ 
+    .cal-main .origin-value {
+        color: #ff5a34;
+    }
+ 
+    .cal-main .origin-type,
+    .cal-main .target-type {
+        padding-left: 5px;
+        width: 70px;
+        font-size: 14px;
+        height: 30px;
+        border: 1px solid #eee;
+        background-color: #fff;
+        vertical-align: middle;
+        margin-right: 10px;
+        border-radius: 3px;
+    }
+ 
+    .cal-keyboard {
+        overflow: hidden;
+    }
+ 
+    .cal-numList {
+        float: left;
+        overflow: hidden;
+        width: 225px;
+    }
+ 
+    .cal-numList li {
+        float: left;
+        width: 75px;
+        height: 75px;
+        text-align: center;
+        line-height: 75px;
+        border-top: 1px solid #eee;
+        border-left: 1px solid #eee;
+        box-sizing: border-box;
+    }
+    
+    li:nth-of-type(3n+1) {
+        border-left: none;
+    }
+ 
+    .buttons {
+        float: left;
+        width: 75px;
+    }
+ 
+    .buttons .btn {
+        width: 75px;
+        background-color: #fff;
+        border-top: 1px solid #eee;
+        border-left: 1px solid #eee;
+        height: 150px;
+        line-height: 150px;
+        text-align: center;
+    }
+    
+    .btn-esc {
+        color: #ff5a34;
+    }
+ 
+    .btn-backspace {
+        position: relative;
+    }
+    
+    .cal-numList li:active,
+    .buttons .btn:active {
+        border: #eee;
+    }
+</style>
+<script>
+    const $ = x => document.querySelector(x);
+    /** 
+     * @description 汇率计算器
+     */
+ 
+    // 币种简写及兑换成人民币映射表
+    var ExchangeMap = {
+        USD: {
+            name: '美元',
+            rate: 7.0384
+        },
+        EUR: {
+            name: '欧元',
+            rate: 7.8471
+        },
+        JPY: {
+            name: '日元',
+            rate: 0.06638
+        },
+        CNY: {
+            name: '人民币',
+            rate: 1
+        }
+    };
+ 
+    /**
+     * 汇率计算器类，其他辅助函数可以自行添加
+     */
+    function Calculator() {
+        this.bindEvent();
+        this.fromCurrency = 'USD';
+        this.toCurrency = 'CNY';
+        this.value = '';
+    }
+ 
+    Calculator.prototype = {
+        /**
+         * DOM事件绑定
+         * 点击事件：click
+         * 键盘事件: keyup / keydown / keypress
+         * 切换事件：select change
+         */
+        bindEvent: function () {
+            $('.origin-value').addEventListener('input', e => {
+                this.value = e.target.value;
+                $('.target-value').innerText = this.exchange(this.value,this.fromCurrency,this.toCurrency);
+            })
+            $('.cal-keyboard').addEventListener('click', e => {
+                let { target } = e;
+                const type = target.getAttribute('data-action');
+                const text = target.innerText;
+                if (type === 'num') {
+                    this.value += text;
+                } else if (type === 'esc') {
+                    this.value = '';
+                } else if (type === 'backspace') {
+                    this.value = this.value.substring(0, this.value.length - 1);
+                }
+                $('.origin-value').value = this.value;
+                $('.target-value').innerText = this.exchange(this.value,this.fromCurrency,this.toCurrency);
+            })
+            $('.origin-type').addEventListener('change', e => {
+                this.fromCurrency = e.target.value;
+                $('.target-value').innerText = this.exchange(this.value,this.fromCurrency,this.toCurrency);
+            });
+            $('.target-type').addEventListener('change', e => {
+                this.toCurrency = e.target.value;
+                $('.target-value').innerText = this.exchange(this.value,this.fromCurrency,this.toCurrency);
+            });
+        },
+ 
+        /**
+         * 币种转换主入口函数
+         * @param {String} fromValue 待兑换金额
+         * @param {String} fromCurrency 源币种
+         * @param {String} toCurrency 目标币种
+         * @return {String} toValue 兑换金额
+         */
+        exchange: function (fromValue="", fromCurrency, toCurrency) {
+            if (!/^[0-9]{0,4}\.?[0-9]{0,2}$/.test(fromValue)) {
+                return "无效输入"
+            }
+            var toValue = Number(fromValue) * (ExchangeMap[fromCurrency].rate) / (ExchangeMap[toCurrency].rate);
+ 
+            // todo
+ 
+            return toValue === 0 ? 0 : toValue.toFixed(2);
+        }
+ 
+        // 其他辅助函数可自行添加
+    }
+
+    new Calculator();
+</script>
