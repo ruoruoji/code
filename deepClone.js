@@ -10,6 +10,19 @@ function deepClone(obj) {
     return target;
 }
 
+// const deepClone = (target, cache = new WeakMap()) => {
+//     if (target === null || typeof target !== 'object') {
+//         return target
+//     }
+//     if (cache.get(target)) {
+//         return target
+//     }
+//     const copy = Array.isArray(target) ? [] : {}
+//     cache.set(target, copy)
+//     Object.keys(target).forEach(key => copy[key] = deepClone(obj[key], cache))
+//     return copy
+// }
+
 var a = [1,2,3,[1,2,3],[1,2]]
 var b = deepClone(a)
 b[0] = 10;
