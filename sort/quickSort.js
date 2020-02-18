@@ -1,4 +1,4 @@
-const arr = [45, 10, 11, 88, 34, 90]
+const arr = [45, 10, 11, 88, 34, 90, 91, 23, 32, 14]
 
 // const quickSort = arr => {
 //     if (arr.length < 2) return arr
@@ -14,11 +14,11 @@ const arr = [45, 10, 11, 88, 34, 90]
 
 
 const quickSort = (arr, left = 0, right = arr.length - 1) => {
-    const pivot = arr[Math.ceil((left + right)/ 2 )]   //0为基准值
+    const pivot = arr[Math.ceil((left + right) / 2 )]   //基准值对算法影响很大
     let leftPoint = left
     let rightPoint = right
     let index
-    if (left < right) {
+    if (left < right) { 
         while (leftPoint < rightPoint) {
             while(arr[rightPoint] > pivot) {
                 rightPoint--
